@@ -3,9 +3,8 @@
     <div class="d2-page-cover__logo">
       <slot/>
     </div>
-    <p class="d2-page-cover__title">新闻管理系统 {{$version}}</p>
-    <p class="d2-page-cover__sub-title">优雅的中后台集成方案</p>
-    <p class="d2-page-cover__build-time">FINAL BUILD TIME {{$buildTime}}</p>
+    <p class="d2-page-cover__title">新闻管理系统</p>
+    <p class="d2-page-cover__sub-title">欢迎您</p>
   </div>
 </template>
 
@@ -32,12 +31,6 @@
     margin: 0px;
     margin-bottom: 5px;
     color: $color-text-normal;
-  }
-  .d2-page-cover__build-time {
-    margin: 0px;
-    margin-bottom: 10px;
-    font-size: 12px;
-    color: $color-text-placehoder;
   }
 }
 </style>

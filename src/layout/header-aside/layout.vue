@@ -29,10 +29,6 @@
           <d2-header-search @click="handleSearchClick"/>
           <d2-header-log/>
           <d2-header-fullscreen/>
-          <d2-header-theme/>
-          <d2-header-size/>
-          <d2-header-locales/>
-          <d2-header-color/>
           <d2-header-user/>
         </div>
       </div>

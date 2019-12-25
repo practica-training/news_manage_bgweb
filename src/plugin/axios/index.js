@@ -4,14 +4,14 @@ import { Message } from 'element-ui'
 import util from '@/libs/util'
 
 // 创建一个错误
-function errorCreate (msg) {
+function errorCreate(msg) {
   const error = new Error(msg)
   errorLog(error)
   throw error
 }
 
 // 记录和显示错误
-function errorLog (error) {
+function errorLog(error) {
   // 添加到日志
   store.dispatch('d2admin/log/push', {
     message: '数据请求异常',
@@ -22,7 +22,7 @@ function errorLog (error) {
   })
   // 打印到控制台
   if (process.env.NODE_ENV === 'development') {
-    util.log.danger('>>>>>> Error >>>>>>')
+    util.log.danger('>>>>>> Error >>>>>>111111')
     console.log(error)
   }
   // 显示提示
@@ -42,6 +42,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   config => {
+    console.log("请求拦截")
     // 在请求发送之前做一些处理
     const token = util.cookies.get('token')
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
@@ -58,10 +59,14 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   response => {
+    console.log("响应拦截")
+    console.log(response);
     // dataAxios 是 axios 返回数据中的 data
     const dataAxios = response.data
+    // console.log(dataAxios)
     // 这个状态码是和后端约定的
-    const { code } = dataAxios
+    const  code  = dataAxios.code;
+    // console.log(code)
     // 根据 code 进行判断
     if (code === undefined) {
       // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
@@ -72,13 +77,18 @@ service.interceptors.response.use(
         case 0:
           // [ 示例 ] code === 0 代表没有错误
           return dataAxios.data
+        case 10000:
+          // [ 示例 ] code === 0 代表没有错误
+          // console.log("code == 10000")
+          return dataAxios
         case 'xxx':
           // [ 示例 ] 其它和后台约定的 code
           errorCreate(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`)
           break
         default:
           // 不是正确的 code
-          errorCreate(`${dataAxios.msg}: ${response.config.url}`)
+          return dataAxios
+          // errorCreate(`${dataAxios.msg}: ${response.config.url}`)
           break
       }
     }

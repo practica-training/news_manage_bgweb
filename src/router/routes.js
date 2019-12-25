@@ -6,6 +6,7 @@ import charts from './modules/charts'
 import components from './modules/components'
 import element from './modules/element'
 import business from './modules/business'
+import manageModules from './modules/manageModules'
 
 import layoutHeaderAside from '@/layout/header-aside'
 
@@ -26,7 +27,8 @@ const frameIn = [
         path: 'index',
         name: 'index',
         meta: {
-          auth: true
+          auth: true,
+          title:"管理员首页"
         },
         component: _import('system/index')
       },
@@ -57,6 +59,7 @@ const frameIn = [
     ]
   },
   playground,
+  manageModules,
   frame,
   d2Crud,
   plugins,

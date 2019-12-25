@@ -7,6 +7,7 @@ export default {
       close: 'esc'
     }
   },
+  serverIp:"http://localhost:8888",
   // 侧边栏默认折叠状态
   menu: {
     asideCollapse: false
@@ -18,7 +19,7 @@ export default {
         name: 'index',
         fullPath: '/index',
         meta: {
-          title: '首页',
+          title: '管理员首页',
           auth: false
         }
       }

@@ -1,8 +1,8 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
-import router from '@/router'
 import { AccountLogin } from '@api/sys.login'
-
+import router from '@/router'
+import manageModules from '@/menu/modules/manageModules.js'
 export default {
   namespaced: true,
   actions: {
@@ -48,6 +48,7 @@ export default {
     },
     /**
      * @description 注销用户并返回登录页面
+     * 注销之后对侧边栏功能进行初始化
      * @param {Object} context
      * @param {Object} payload confirm {Boolean} 是否需要确认
      */
@@ -56,11 +57,60 @@ export default {
        * @description 注销
        */
       async function logout () {
+        manageModules.children = (pre => [
+          { path: `${pre}index`, title: '管理员首页', icon: 'home' },
+          {
+            path: `${pre}report`,
+            title: '举报',
+            icon: 'cubes',
+            children: [
+              { path: `${pre}userReport`, title: '用户举报' },
+              { path: `${pre}newsReport`, title: '新闻举报' },
+            ]
+          },
+          {
+            path: `${pre}apply`,
+            title: '申请',
+            icon: 'cubes',
+            children: [
+              { path: `${pre}userVerified`, title: '用户实名认证' },
+              { path: `${pre}newsApply`, title: '新闻发布申请' },
+            ]
+          },
+          {
+            path: `${pre}manage`,
+            title: '管理',
+            icon: 'cubes',
+            children: [
+              { path: `${pre}userManage`, title: '用户管理' },
+              { path: `${pre}newsManage`, title: '新闻管理' },
+            ]
+          },
+          {
+            path: `${pre}newsMakerManage`,
+            title: '新闻发布者管理',
+            icon: 'cubes',
+            children: [
+              { path: `${pre}userApplyToNewsMaker`, title: '新闻发布者申请' },
+              { path: `${pre}newsMakerManage`, title: '管理新闻发布者' },
+            ]
+          },
+          {
+            path: `${pre}superManage`,
+            title: '超级管理员',
+            icon: 'cubes',
+            children: [
+              { path: `${pre}manageManage`, title: '管理管理员' },
+              { path: `${pre}logLook`, title: '日志查看' },
+            ]
+          }
+      ])('/manage/')
         // 删除cookie
         util.cookies.remove('token')
         util.cookies.remove('uuid')
         // 清空 vuex 用户信息
         await dispatch('d2admin/user/set', {}, { root: true })
+        console.log(manageModules.children);
         // 跳转路由
         router.push({
           name: 'login'

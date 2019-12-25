@@ -14,7 +14,8 @@ import demoBusiness from './modules/demo-business'
 import demoD2Crud from './modules/demo-d2-crud'
 // 第三方网页
 import demoFrame from './modules/demo-frame'
-
+import manageModules from './modules/manageModules'
+// 第三方网页
 // 菜单 侧边栏
 export const menuAside = [
   demoComponents,
@@ -24,15 +25,19 @@ export const menuAside = [
   demoPlayground,
   demoBusiness,
   demoD2Crud,
-  demoFrame
+  demoFrame,
+  manageModules
 ]
 
 // 菜单 顶栏
 export const menuHeader = [
   {
-    path: '/index',
+    path: '/manage',
     title: '首页',
-    icon: 'home'
+    icon: 'home',
+    children:[
+      manageModules
+    ]
   },
   {
     title: '功能',

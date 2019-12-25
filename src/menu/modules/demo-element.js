@@ -22,7 +22,7 @@ export default {
       title: '表单',
       icon: 'check-square-o',
       children: [
-        { path: `${pre}form-radio`, title: '单选框' },
+        { path: `${pre}form-radio`, title: '单选框'},
         { path: `${pre}form-checkbox`, title: '多选框' },
         { path: `${pre}form-input`, title: '输入框' },
         { path: `${pre}form-input-number`, title: '计数器' },

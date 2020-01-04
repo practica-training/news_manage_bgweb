@@ -63,6 +63,7 @@ import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
 import localeMixin from '@/locales/mixin.js'
 import manageModules from '@/menu/modules/manageModules.js'
+import * as loginAPI from "@/api/login.js"
 export default {
   mixins: [
     localeMixin
@@ -132,18 +133,27 @@ export default {
      */
     // 提交登录信息
     submit () {
+      // var fromData = {
+      //     adminname:this.formLogin.username,
+      //     adminPassword: this.formLogin.password
+      // }
+      // loginAPI.adminLogin(fromData).then(res => {
+      //   console.log(res);
+      //   // 返回数据
+      // });
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
           this.login({
-            username: this.formLogin.username,
-            password: this.formLogin.password
+            adminName: this.formLogin.username,
+            adminPassword: this.formLogin.password
           })
-            .then(() => {
+            .then((res) => {
               // 重定向对象不存在则返回顶层路径
-              var powerLevel = Math.floor(Math.random() * 5)+1;// 可均衡获取1到5的随机整数。
+              var powerLevel = res.power+1;
+              // var powerLevel = Math.floor(Math.random() * 5)+1;// 可均衡获取1到5的随机整数。
               console.log("获得管理员的权限等级，重定向,当前等级"+powerLevel)
               var manageModulesChildren = manageModules.children;
               console.log(manageModulesChildren)

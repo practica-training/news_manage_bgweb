@@ -1,6 +1,6 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
-import { AccountLogin } from '@api/sys.login'
+import { AccountLogin, GetAdminInfo } from '@api/sys.login'
 import router from '@/router'
 import manageModules from '@/menu/modules/manageModules.js'
 export default {
@@ -13,15 +13,15 @@ export default {
      * @param {Object} payload password {String} 密码
      * @param {Object} payload route {Object} 登录成功后定向的路由对象 任何 vue-router 支持的格式
      */
-    login ({ dispatch }, {
-      username = '',
-      password = ''
+    login({ dispatch }, {
+      adminName = '',
+      adminPassword = ''
     } = {}) {
       return new Promise((resolve, reject) => {
         // 开始请求登录接口
         AccountLogin({
-          username,
-          password
+          adminName,
+          adminPassword
         })
           .then(async res => {
             // 设置 cookie 一定要存 uuid 和 token 两个 cookie
@@ -29,16 +29,20 @@ export default {
             // uuid 是用户身份唯一标识 用户注册的时候确定 并且不可改变 不可重复
             // token 代表用户当前登录状态 建议在网络请求中携带 token
             // 如有必要 token 需要定时更新，默认保存一天
-            util.cookies.set('uuid', res.uuid)
-            util.cookies.set('token', res.token)
-            // 设置 vuex 用户信息
-            await dispatch('d2admin/user/set', {
-              name: res.name
-            }, { root: true })
-            // 用户登录后从持久化数据加载一系列的设置
-            await dispatch('load')
-            // 结束
-            resolve()
+            console.log(res);
+            util.cookies.set('uuid', res.id)
+            util.cookies.set('token', res.id)
+            GetAdminInfo(res.id).then(async res => {
+              console.log(res);
+              // 设置 vuex 用户信息
+              await dispatch('d2admin/user/set', {
+                name: res.adminName,
+              }, { root: true })
+              // 用户登录后从持久化数据加载一系列的设置
+              await dispatch('load')
+              // 结束
+              resolve(res)
+            })
           })
           .catch(err => {
             console.log('err: ', err)
@@ -52,11 +56,11 @@ export default {
      * @param {Object} context
      * @param {Object} payload confirm {Boolean} 是否需要确认
      */
-    logout ({ commit, dispatch }, { confirm = false } = {}) {
+    logout({ commit, dispatch }, { confirm = false } = {}) {
       /**
        * @description 注销
        */
-      async function logout () {
+      async function logout() {
         manageModules.children = (pre => [
           { path: `${pre}index`, title: '管理员首页', icon: 'home' },
           {
@@ -104,7 +108,7 @@ export default {
               { path: `${pre}logLook`, title: '日志查看' },
             ]
           }
-      ])('/manage/')
+        ])('/manage/')
         // 删除cookie
         util.cookies.remove('token')
         util.cookies.remove('uuid')
@@ -140,7 +144,7 @@ export default {
      * @description 用户登录后从持久化数据加载一系列的设置
      * @param {Object} context
      */
-    load ({ dispatch }) {
+    load({ dispatch }) {
       return new Promise(async resolve => {
         // DB -> store 加载用户名
         await dispatch('d2admin/user/load', null, { root: true })

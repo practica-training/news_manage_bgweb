@@ -7,6 +7,7 @@ export default {
       close: 'esc'
     }
   },
+  // serverIp:"http://112.124.31.193:8888",
   serverIp:"http://localhost:8888",
   // 侧边栏默认折叠状态
   menu: {
